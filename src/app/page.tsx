@@ -1,13 +1,12 @@
-"use client";
+import { authProviderServer } from "@providers/auth-provider";
+import { redirect } from "next/navigation";
 
-import { Suspense } from "react";
+export default async function HomePage() {
+  const { authenticated } = await authProviderServer.check();
 
-import { WelcomePage } from "@refinedev/core";
+  if (authenticated) {
+    redirect("/dashboard");
+  }
 
-export default function IndexPage() {
-  return (
-    <Suspense>
-      <WelcomePage />
-    </Suspense>
-  );
+  redirect("/login");
 }

@@ -8,6 +8,8 @@ import React, { Suspense } from "react";
 import { authProviderClient } from "@providers/auth-provider";
 import { dataProvider } from "@providers/data-provider";
 import "@styles/global.css";
+import { ThemeProvider } from "@providers/theme-provider";
+import { resources } from "@lib/resources";
 
 export const metadata: Metadata = {
   title: "Refine",
@@ -29,20 +31,28 @@ export default function RootLayout({
           <GitHubBanner />
           <RefineKbarProvider>
             <DevtoolsProvider>
-              <Refine
-                routerProvider={routerProvider}
-                authProvider={authProviderClient}
-                dataProvider={dataProvider}
-                options={{
-                  syncWithLocation: true,
-                  warnWhenUnsavedChanges: true,
-                  useNewQueryKeys: true,
-                  projectId: "FXUzUo-o472dN-LR5akn",
-                }}
+              <ThemeProvider
+                attribute="class"
+                defaultTheme="system"
+                enableSystem
+                disableTransitionOnChange
               >
-                {children}
-                <RefineKbar />
-              </Refine>
+                <Refine
+                  routerProvider={routerProvider}
+                  authProvider={authProviderClient}
+                  dataProvider={dataProvider}
+                  resources={resources}
+                  options={{
+                    syncWithLocation: true,
+                    warnWhenUnsavedChanges: true,
+                    useNewQueryKeys: true,
+                    projectId: "FXUzUo-o472dN-LR5akn",
+                  }}
+                >
+                  {children}
+                  <RefineKbar />
+                </Refine>
+              </ThemeProvider>
             </DevtoolsProvider>
           </RefineKbarProvider>
         </Suspense>

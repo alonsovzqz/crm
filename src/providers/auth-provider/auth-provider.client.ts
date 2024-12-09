@@ -57,6 +57,12 @@ export const authProviderClient: AuthProvider = {
       const { data, error } = await supabaseBrowserClient.auth.signUp({
         email,
         password,
+        options: {
+          data: {
+            full_name: email.split('@')[0],
+            avatar_url: null,
+          },
+        },
       });
 
       if (error) {
@@ -66,7 +72,20 @@ export const authProviderClient: AuthProvider = {
         };
       }
 
-      if (data) {
+      if (data?.user) {
+        const { data: sessionData, error: loginError } = 
+          await supabaseBrowserClient.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+        if (loginError) {
+          return {
+            success: false,
+            error: loginError,
+          };
+        }
+
         return {
           success: true,
           redirectTo: "/",
